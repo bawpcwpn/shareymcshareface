@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Sharey McShareface</title>
+
+        <link rel="stylesheet" href="fonts/fontello/css/sharey.css" />
+
+        <style>
+            body {
+                font-family: "Helvetica Neue", Arial, sans-serif;
+                font-size: 16px;
+                padding-top: 50px;
+                background: LIGHTSKYBLUE;
+                color: #333;
+            }
+            .wrapper {
+                max-width: 960px;
+                padding: 0 30px;
+                margin: 0 auto;
+                text-align: center;
+            }
+
+
+
+            ul.social-list {
+                list-style: none;
+                margin: 40px 0;
+                font-size: 0;
+                padding: 0;
+            }
+            ul.social-list li {
+                display: inline-block;
+                color: #FFF;
+                font-size: 35px;
+                margin: 0 4px;
+            }
+            span[class^="share_"] {
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+            span[class^="share_"]:hover {
+                opacity: 0.8;
+            }
+            span[class^="share_"]:active {
+                opacity: 0.6;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <h1>Sharey McShareface</h1>
+
+            <p>Sample below:</p>
+
+            <ul class="social-list">
+                <li><span class="share_facebook"><i class="sharey-facebook-rect"></i></span></li>
+                <li><span class="share_twitter"><i class="sharey-twitter-bird"></i></span></li>
+                <li><span class="share_email"><i class="sharey-mail"></i></span></li>
+                <li><span class="share_linkedin"><i class="sharey-linkedin"></i></span></li>
+            </ul>
+        </div>
+
+        <script src="js/min/sharey-min.js"></script>
+    </body>
+</html>
