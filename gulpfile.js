@@ -10,7 +10,7 @@ gulp.task("babel", function() {
 });
 
 gulp.task("watching",function(){
-    var watcher = gulp.watch('js/*.js', ['babel']);
+    var watcher = gulp.watch('js/*.js', gulp.parallel('babel'));
     watcher.on('change', function(event) {
         console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
     });
