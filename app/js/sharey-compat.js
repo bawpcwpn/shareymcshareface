@@ -2,7 +2,7 @@
 
 /*
     Sharey
-    by Thomas
+    Thomas Huxley 2016
  */
 
 (function (global) {})(window);

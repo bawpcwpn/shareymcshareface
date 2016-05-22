@@ -2,11 +2,15 @@ var gulp = require("gulp");
 var babel = require("gulp-babel");
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
+var useref = require('gulp-useref');
+var gulpIf = require('gulp-if');
+var del = require('del');
 
 gulp.task("babel", function() {
-    return gulp.src("js/sharey.js")
+    return gulp.src("app/js/sharey.js")
         .pipe(babel())
-        .pipe(gulp.dest("dist"));
+        .pipe(rename({suffix: '-compat'}))
+        .pipe(gulp.dest("app/js"));
 });
 
 gulp.task("watching",function(){
@@ -19,12 +23,30 @@ gulp.task("watching",function(){
 });
 
 gulp.task("minify",function(){
-    return gulp.src('dist/sharey.js')
+    return gulp.src('app/js/sharey.js')
+        .pipe(babel())
         .pipe(uglify())
-        .pipe(rename({ suffix: '.min' }))
-        .pipe(gulp.dest('dist'));
+        //.pipe(rename({ suffix: '.min' }))
+        .pipe(gulp.dest('dist/js/'));
+});
+
+gulp.task('fonts', function() {
+    return gulp.src('app/fonts/**/*')
+        .pipe(gulp.dest('dist/fonts'))
+});
+
+gulp.task('useref', function(){
+    return gulp.src('app/*.html')
+        .pipe(useref())
+        // Minifies only if it's a JavaScript file
+        .pipe(gulpIf('*.js', uglify()))
+        .pipe(gulp.dest('dist'))
+});
+
+gulp.task('clean:dist', function() {
+    return del.sync('dist');
 });
 
 gulp.task("dev", gulp.series('watching'));
 
-gulp.task("build", gulp.series('babel','minify'));
+gulp.task("build", gulp.series('babel','useref','fonts'));
