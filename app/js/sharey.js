@@ -86,7 +86,7 @@ var initFacebookShare = function() {
  */
 
 var initTwitterShare = function() {
-
+    console.log('Twitter share fired');
 };
 
 /**
@@ -95,7 +95,7 @@ var initTwitterShare = function() {
  */
 
 var initEmailShare = function() {
-
+    console.log('Email share fired');
 };
 
 /**
@@ -104,7 +104,7 @@ var initEmailShare = function() {
  */
 
 var initLinkedInShare = function() {
-
+    console.log('LinkedIn share fired');
 };
 
 /**

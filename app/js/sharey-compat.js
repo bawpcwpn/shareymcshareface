@@ -14,7 +14,21 @@
 var shareyElementType = 'span',
     shareyClassPrefix = 'sharey',
     shareyClassSeperator = '_',
-    shareyBaseClass = shareyClassPrefix + shareyClassSeperator;
+    shareyBaseClass = shareyClassPrefix + shareyClassSeperator,
+    facebookAppId = '165738063828836';
+
+/**
+ * Share details to use across services
+ * @type {{title: string, type: null, image: null, url: string, description: null, video: null}}
+ */
+var shareDetailsObject = {
+    "title": document.title,
+    "type": null,
+    "image": null,
+    "url": window.location.href,
+    "description": null,
+    "video": null
+};
 
 /**
  * Fires attached function only once
@@ -43,6 +57,10 @@ var once = function once(fn, context) {
 
 var initFacebookShare = function initFacebookShare() {
     console.log('Facebook share fired');
+
+    var sdkScript = "" + "<script>" + "window.fbAsyncInit = function() {" + "FB.init({" + "appId      : " + facebookAppId + "," + "xfbml      : true," + "version    : 'v2.6'" + "});" + "};" + "" + "(function(d, s, id){" + "var js, fjs = d.getElementsByTagName(s)[0];" + "if (d.getElementById(id)) {return;}" + "js = d.createElement(s); js.id = id;" + "js.src = 'connect.facebook.net/en_US/sdk.js';" + "fjs.parentNode.insertBefore(js, fjs);" + "}(document, 'script', 'facebook-jssdk'));" + "<\/script>";
+
+    document.write(sdkScript);
 };
 
 /**
@@ -50,21 +68,27 @@ var initFacebookShare = function initFacebookShare() {
  * @return {undefined}
  */
 
-var initTwitterShare = function initTwitterShare() {};
+var initTwitterShare = function initTwitterShare() {
+    console.log('Twitter share fired');
+};
 
 /**
  * Initialise Email sharing
  * @return {undefined}
  */
 
-var initEmailShare = function initEmailShare() {};
+var initEmailShare = function initEmailShare() {
+    console.log('Email share fired');
+};
 
 /**
  * Initialise LinkedIn sharing
  * @return {undefined}
  */
 
-var initLinkedInShare = function initLinkedInShare() {};
+var initLinkedInShare = function initLinkedInShare() {
+    console.log('LinkedIn share fired');
+};
 
 /**
  *  Initialises share on individual items once hovered
