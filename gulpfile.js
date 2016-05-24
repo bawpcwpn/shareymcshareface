@@ -5,16 +5,18 @@ var rename = require('gulp-rename');
 var useref = require('gulp-useref');
 var gulpIf = require('gulp-if');
 var del = require('del');
+var notify = require("gulp-notify");
 
 gulp.task("babel", function() {
     return gulp.src("app/js/sharey.js")
         .pipe(babel())
         .pipe(rename({suffix: '-compat'}))
-        .pipe(gulp.dest("app/js"));
+        .pipe(gulp.dest("app/js"))
+        .pipe(notify('Babel finished'));
 });
 
 gulp.task("watching",function(){
-    var watcher = gulp.watch('js/*.js', gulp.parallel('babel'));
+    var watcher = gulp.watch('app/js/sharey.js', gulp.series('babel'));
     watcher.on('change', function(event) {
         console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
     });
@@ -26,7 +28,6 @@ gulp.task("minify",function(){
     return gulp.src('app/js/sharey.js')
         .pipe(babel())
         .pipe(uglify())
-        //.pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest('dist/js/'));
 });
 
