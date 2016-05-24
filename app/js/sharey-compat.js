@@ -1,9 +1,20 @@
 'use strict';
 
 /*
-    Sharey
+    Sharey McShareface
     Thomas Huxley 2016
+    http://www.thomashuxley.com
+    (Name courtesy of Sam Sargent)
  */
+
+/*
+    Default options
+ */
+
+var shareyElementType = 'span',
+    shareyClassPrefix = 'sharey',
+    shareyClassSeperator = '_',
+    shareyBaseClass = shareyClassPrefix + shareyClassSeperator;
 
 /**
  * Fires attached function only once
@@ -92,7 +103,7 @@ var initShare = function initShare() {
 
     // get nodeList ($shareNode) of span's starting with 'sharey_' class and turn
     // it into a an array ($shareItems)
-    var $shareNode = document.querySelectorAll('span[class^="sharey_"]'),
+    var $shareNode = document.querySelectorAll(shareyElementType + '[class^="' + shareyBaseClass + '"]'),
         $shareItems = Array.from($shareNode);
 
     // Iterate over $shareItems
@@ -117,12 +128,13 @@ var initShare = function initShare() {
 
                 // Check if class starts with 'sharey_'
                 // to avoid other classes
-                if (className.startsWith('sharey_')) {
+                if (className.startsWith(shareyBaseClass)) {
                     // set the shareType eg. facebook, twitter etc
-                    shareType = className.replace('sharey_', '');
+                    shareType = className.replace(shareyBaseClass, '');
                 }
             }
 
+            // set initialise to fire once
             var fireOnce = once(initShareItem(shareType));
 
             // Add an event listener on hover of share items
