@@ -6,11 +6,33 @@
  */
 
 /**
+ * Fires attached function only once
+ * @param {function} fn - the function you supply
+ * @param {object} context\
+ * @return {function} result
+ */
+
+var once = function once(fn, context) {
+    var result;
+
+    return function () {
+        if (fn) {
+            result = fn.apply(context || this, arguments);
+            fn = null;
+        }
+
+        return result;
+    };
+};
+
+/**
  * Initialise Facebook sharing
  * @return {undefined}
  */
 
-var initFacebookShare = function initFacebookShare() {};
+var initFacebookShare = function initFacebookShare() {
+    console.log('Facebook share fired');
+};
 
 /**
  * Initialise Twitter sharing
@@ -101,10 +123,12 @@ var initShare = function initShare() {
                 }
             }
 
+            var fireOnce = once(initShareItem(shareType));
+
             // Add an event listener on hover of share items
             $shareItem.addEventListener('mouseover', function (event) {
                 // initialise share item of the type
-                initShareItem(shareType);
+                fireOnce();
             });
         };
 

@@ -48,6 +48,6 @@ gulp.task('clean:dist', function() {
     return del.sync('dist');
 });
 
-gulp.task("dev", gulp.series('watching'));
+gulp.task("dev", gulp.series('babel','watching'));
 
 gulp.task("build", gulp.series('babel','useref','fonts'));
