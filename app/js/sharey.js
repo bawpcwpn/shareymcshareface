@@ -91,7 +91,7 @@ var once = (fn, context) => {
 var initFacebookShare = () => {
     console.log('Facebook share fired');
 
-    var sdkScript = "" +
+    document.body.innerHTML += "" +
         "<script>" +
             "window.fbAsyncInit = function() {" +
                 "FB.init({" +
@@ -110,7 +110,6 @@ var initFacebookShare = () => {
             "}(document, 'script', 'facebook-jssdk'));" +
         "<\/script>";
 
-    document.write(sdkScript);
 };
 
 /**
