@@ -88,10 +88,13 @@ var once = function once(fn, context) {
  * @return {undefined}
  */
 
-var initFacebookShare = function initFacebookShare() {
-    console.log('Facebook share fired');
+var initFacebookShare = function initFacebookShare(elementName) {
 
-    document.body.innerHTML += "" + "<script>" + "window.fbAsyncInit = function() {" + "FB.init({" + "appId      : " + facebookAppId + "," + "xfbml      : true," + "version    : 'v2.6'" + "});" + "};" + "" + "(function(d, s, id){" + "var js, fjs = d.getElementsByTagName(s)[0];" + "if (d.getElementById(id)) {return;}" + "js = d.createElement(s); js.id = id;" + "js.src = '\/\/connect.facebook.net/en_US/sdk.js';" + "fjs.parentNode.insertBefore(js, fjs);" + "}(document, 'script', 'facebook-jssdk'));" + "<\/script>";
+    var $shareButton = document.querySelector(shareyElementType + '.' + shareyBaseClass + elementName);
+
+    $shareButton.addEventListener('click', function (event) {
+        window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareDetailsObject.url));
+    });
 };
 
 /**
@@ -130,10 +133,11 @@ var initShareItem = function initShareItem(shareType) {
 
     // Check which shareType it matches and initialise each
     // share item individually, only once it's been hovered
+    // Pass sharey suffix class
     switch (shareType) {
         // Facebook share type
         case 'facebook':
-            initFacebookShare();
+            initFacebookShare('facebook');
             break;
         // Twitter share type
         case 'twitter':
