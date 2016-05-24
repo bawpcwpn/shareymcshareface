@@ -34,7 +34,7 @@ var shareDetailsObject = {
  * @param tagName
  * @returns {*}
  */
-var getMetaTagValue = function(tagName) {
+var getMetaTagValue = tagName => {
     var metas = document.getElementsByTagName('meta');
 
     for (var i=0; i<metas.length; i++) {
@@ -46,7 +46,7 @@ var getMetaTagValue = function(tagName) {
     return false;
 };
 
-var setShareParameters = function() {
+var setShareParameters = () => {
 
     for(let shareDetail in shareDetailsObject) {
 
@@ -69,7 +69,7 @@ var setShareParameters = function() {
  * @return {function} result
  */
 
-var once = function(fn, context) {
+var once = (fn, context) => {
     var result;
 
     return function() {
@@ -88,7 +88,7 @@ var once = function(fn, context) {
  * @return {undefined}
  */
 
-var initFacebookShare = function() {
+var initFacebookShare = () => {
     console.log('Facebook share fired');
 
     var sdkScript = "" +
@@ -118,7 +118,7 @@ var initFacebookShare = function() {
  * @return {undefined}
  */
 
-var initTwitterShare = function() {
+var initTwitterShare = () => {
     console.log('Twitter share fired');
 };
 
@@ -127,7 +127,7 @@ var initTwitterShare = function() {
  * @return {undefined}
  */
 
-var initEmailShare = function() {
+var initEmailShare = () => {
     console.log('Email share fired');
 };
 
@@ -136,7 +136,7 @@ var initEmailShare = function() {
  * @return {undefined}
  */
 
-var initLinkedInShare = function() {
+var initLinkedInShare = () => {
     console.log('LinkedIn share fired');
 };
 
@@ -145,7 +145,7 @@ var initLinkedInShare = function() {
  *  @param {string} shareType - the type of share item, eg. facebook, twitter, linkedin etc
  *  @return {undefined}
  */
-var initShareItem = function(shareType) {
+var initShareItem = shareType => {
 
     // Check which shareType it matches and initialise each
     // share item individually, only once it's been hovered
@@ -174,7 +174,7 @@ var initShareItem = function(shareType) {
  *  Initialises share on 'sharey_' items
  *  @return {undefined}
  */
-var initShare = function(){
+var initShare = () => {
 
     // get nodeList ($shareNode) of span's starting with 'sharey_' class and turn
     // it into a an array ($shareItems)
