@@ -51,6 +51,13 @@ var setShareParameters = function setShareParameters() {
 
     for (var shareDetail in shareDetailsObject) {
 
+        // Check for description tag
+        var description = getMetaTagValue('description');
+        if (description != false) {
+            shareDetailsObject.description = description;
+        }
+
+        // check for Open graph tags
         if (shareDetailsObject.hasOwnProperty(shareDetail)) {
             var tagType = shareDetail.toString(),
                 tagName = 'og:' + tagType,
@@ -84,43 +91,109 @@ var once = function once(fn, context) {
 };
 
 /**
+ * Opens url on click in new window
+ * @param elementName - name of element to bind click event to
+ * @param shareUrl - the url to open in a new window
+ */
+
+var bindShareUrl = function bindShareUrl(elementName, shareUrl) {
+
+    var $shareButton = document.querySelector(shareyElementType + '.' + shareyBaseClass + elementName);
+
+    $shareButton.addEventListener('click', function (event) {
+        window.open(shareUrl);
+    });
+};
+
+/**
  * Initialise Facebook sharing
+ * @param {string} elementName - suffix of element for selecting
  * @return {undefined}
  */
 
 var initFacebookShare = function initFacebookShare(elementName) {
 
-    var $shareButton = document.querySelector(shareyElementType + '.' + shareyBaseClass + elementName);
-
-    $shareButton.addEventListener('click', function (event) {
-        window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareDetailsObject.url));
-    });
+    bindShareUrl(elementName, 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareDetailsObject.url));
 };
 
 /**
  * Initialise Twitter sharing
+ * @param {string} elementName - suffix of element for selecting
  * @return {undefined}
  */
 
-var initTwitterShare = function initTwitterShare() {
-    console.log('Twitter share fired');
+var initTwitterShare = function initTwitterShare(elementName) {
+
+    var $shareButton = document.querySelector(shareyElementType + '.' + shareyBaseClass + elementName),
+        twitterShareUrl = 'https://twitter.com/intent/tweet?text=',
+        twitterUrlLength = 23,
+        twitterPostLength = 140,
+        twitterShareMessage = '';
+
+    // Add url of site which will equal twitterUrlLength to share url
+    twitterShareMessage += shareDetailsObject.url;
+    twitterPostLength -= twitterUrlLength;
+
+    // Check if Username exists to see if it needs to be subtracted from twitterPostLength
+    if ($shareButton.hasAttribute('data-username') && $shareButton.getAttribute('data-username') != '') {
+        var username = $shareButton.getAttribute('data-username').toString();
+        twitterShareMessage += ' via @' + username;
+        twitterPostLength -= username.length - 6;
+    }
+
+    var description = null;
+
+    // Check if description object value already set
+    if (shareDetailsObject.description != null && shareDetailsObject.description != '') {
+        description = shareDetailsObject;
+    }
+    // Check for button override
+    if ($shareButton.hasAttribute('data-description') && $shareButton.getAttribute('data-description') != '') {
+        description = $shareButton.getAttribute('data-description');
+    }
+    // check if description is still null
+    if (description != null && description != '') {
+        var descriptionLength = description.length;
+
+        // Remove one character from twitterPostLength to account for space
+        twitterUrlLength -= 1;
+
+        if (descriptionLength > twitterUrlLength) {
+            // Remove 3 characters for ...
+            twitterPostLength -= 4;
+            // Trim description length
+            description = description.substring(0, Math.min(description.length, twitterPostLength)) + '... ';
+        }
+
+        // Add description to message
+        twitterShareMessage = description + twitterShareMessage;
+    }
+
+    // Encode URL
+    twitterShareUrl += encodeURIComponent(twitterShareMessage);
+
+    console.log(twitterShareUrl);
+
+    bindShareUrl(elementName, twitterShareUrl);
 };
 
 /**
  * Initialise Email sharing
+ * @param {string} elementName - suffix of element for selecting
  * @return {undefined}
  */
 
-var initEmailShare = function initEmailShare() {
+var initEmailShare = function initEmailShare(elementName) {
     console.log('Email share fired');
 };
 
 /**
  * Initialise LinkedIn sharing
+ * @param {string} elementName - suffix of element for selecting
  * @return {undefined}
  */
 
-var initLinkedInShare = function initLinkedInShare() {
+var initLinkedInShare = function initLinkedInShare(elementName) {
     console.log('LinkedIn share fired');
 };
 
@@ -141,15 +214,15 @@ var initShareItem = function initShareItem(shareType) {
             break;
         // Twitter share type
         case 'twitter':
-            initTwitterShare();
+            initTwitterShare('twitter');
             break;
         // LinkedIn share type
         case 'linkedin':
-            initLinkedInShare();
+            initLinkedInShare('linkedin');
             break;
         // Email share type
         case 'email':
-            initEmailShare();
+            initEmailShare('email');
             break;
     }
 };
