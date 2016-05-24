@@ -113,8 +113,12 @@ var initShare = function(){
         $shareItems = Array.from($shareNode);
 
 
+    var fireEvents = [];
+
+
     // Iterate over $shareItems
     for (let $shareItem of $shareItems) {
+
 
         // Grab the classList
         // set shareType
@@ -134,13 +138,23 @@ var initShare = function(){
             }
         }
 
-        // set initialise to fire once
-        let fireOnce = once(initShareItem(shareType));
+
+        fireEvents.push({shareName: shareType, eventFired: false});
 
         // Add an event listener on hover of share items
         $shareItem.addEventListener('mouseover',function(event){
             // initialise share item of the type
-            fireOnce();
+            // set initialise to fire once
+
+            for (let shareEvent of fireEvents) {
+                if(shareEvent.hasOwnProperty('shareName') && shareEvent['shareName'] == shareType) {
+                    if(shareEvent.hasOwnProperty('eventFired') && !shareEvent.eventFired) {
+                        initShareItem(shareType);
+                        shareEvent.eventFired = true;
+                    }
+                }
+            }
+
         });
 
     }
