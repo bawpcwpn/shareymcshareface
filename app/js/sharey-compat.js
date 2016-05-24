@@ -31,6 +31,39 @@ var shareDetailsObject = {
 };
 
 /**
+ * Gets meta tag values
+ * @param tagName
+ * @returns {*}
+ */
+var getMetaTagValue = function getMetaTagValue(tagName) {
+    var metas = document.getElementsByTagName('meta');
+
+    for (var i = 0; i < metas.length; i++) {
+        if (metas[i].getAttribute("property") == tagName) {
+            return metas[i].getAttribute("content");
+        }
+    }
+
+    return false;
+};
+
+var setShareParameters = function setShareParameters() {
+
+    for (var shareDetail in shareDetailsObject) {
+
+        if (shareDetailsObject.hasOwnProperty(shareDetail)) {
+            var tagType = shareDetail.toString(),
+                tagName = 'og:' + tagType,
+                tagValue = getMetaTagValue(tagName);
+
+            if (tagValue != false) {
+                shareDetailsObject[tagType] = tagValue;
+            }
+        }
+    }
+};
+
+/**
  * Fires attached function only once
  * @param {function} fn - the function you supply
  * @param {object} context\
@@ -58,7 +91,7 @@ var once = function once(fn, context) {
 var initFacebookShare = function initFacebookShare() {
     console.log('Facebook share fired');
 
-    var sdkScript = "" + "<script>" + "window.fbAsyncInit = function() {" + "FB.init({" + "appId      : " + facebookAppId + "," + "xfbml      : true," + "version    : 'v2.6'" + "});" + "};" + "" + "(function(d, s, id){" + "var js, fjs = d.getElementsByTagName(s)[0];" + "if (d.getElementById(id)) {return;}" + "js = d.createElement(s); js.id = id;" + "js.src = 'connect.facebook.net/en_US/sdk.js';" + "fjs.parentNode.insertBefore(js, fjs);" + "}(document, 'script', 'facebook-jssdk'));" + "<\/script>";
+    var sdkScript = "" + "<script>" + "window.fbAsyncInit = function() {" + "FB.init({" + "appId      : " + facebookAppId + "," + "xfbml      : true," + "version    : 'v2.6'" + "});" + "};" + "" + "(function(d, s, id){" + "var js, fjs = d.getElementsByTagName(s)[0];" + "if (d.getElementById(id)) {return;}" + "js = d.createElement(s); js.id = id;" + "js.src = '\/\/connect.facebook.net/en_US/sdk.js';" + "fjs.parentNode.insertBefore(js, fjs);" + "}(document, 'script', 'facebook-jssdk'));" + "<\/script>";
 
     document.write(sdkScript);
 };
@@ -130,7 +163,8 @@ var initShare = function initShare() {
     var $shareNode = document.querySelectorAll(shareyElementType + '[class^="' + shareyBaseClass + '"]'),
         $shareItems = Array.from($shareNode);
 
-    var fireEvents = [];
+    var fireEvents = [],
+        shareParametersSet = false;
 
     // Iterate over $shareItems
     var _iteratorNormalCompletion = true;
@@ -179,6 +213,9 @@ var initShare = function initShare() {
                             if (shareEvent.hasOwnProperty('eventFired') && !shareEvent.eventFired) {
                                 initShareItem(shareType);
                                 shareEvent.eventFired = true;
+
+                                !shareParametersSet ? setShareParameters() : null;
+                                !shareParametersSet ? shareParametersSet = true : null;
                             }
                         }
                     }
