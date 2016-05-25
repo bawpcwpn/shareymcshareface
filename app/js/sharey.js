@@ -46,6 +46,9 @@ var getMetaTagValue = tagName => {
     return false;
 };
 
+/**
+ * Set share parameters
+ */
 var setShareParameters = () => {
 
     for(let shareDetail in shareDetailsObject) {
@@ -69,24 +72,8 @@ var setShareParameters = () => {
     }
 };
 
-/**
- * Fires attached function only once
- * @param {function} fn - the function you supply
- * @param {object} context\
- * @return {function} result
- */
-
-var once = (fn, context) => {
-    var result;
-
-    return function() {
-        if(fn) {
-            result = fn.apply(context || this, arguments);
-            fn = null;
-        }
-
-        return result;
-    };
+var getShareElement = elementName => {
+    return document.querySelector(shareyElementType + '.' + shareyBaseClass + elementName);
 };
 
 /**
@@ -98,7 +85,7 @@ var once = (fn, context) => {
 
 var bindShareUrl = (elementName, shareUrl, windowTarget = "_blank") => {
 
-    let $shareButton = document.querySelector(shareyElementType + '.' + shareyBaseClass + elementName);
+    let $shareButton = getShareElement(elementName);
 
     $shareButton.addEventListener('click', event => {
         window.open(shareUrl, windowTarget);
@@ -128,7 +115,7 @@ var initFacebookShare = elementName => {
 
 var initTwitterShare = elementName => {
 
-    let $shareButton = document.querySelector(shareyElementType + '.' + shareyBaseClass + elementName),
+    let $shareButton = getShareElement(elementName),
         twitterShareUrl = 'https://twitter.com/intent/tweet?text=',
         twitterUrlLength = 23,
         twitterPostLength = 140,
@@ -191,19 +178,30 @@ var initEmailShare = elementName => {
 
     let subject,
         message,
-        encodedMessage;
+        encodedMessage,
+        $shareBtn = getShareElement(elementName);
 
     encodedMessage = 'mailto:';
 
     // Add Subject
     subject = shareDetailsObject.title;
+
+    if($shareBtn.hasAttribute('data-subject')){
+        subject = $shareBtn.getAttribute('data-subject');
+    }
+
     encodedMessage += '?Subject=' + encodeURIComponent(subject);
 
     // Add Message
     message = encodeURIComponent('Hey! ') + '%0D%0A' +
         '%0D%0A' +
-        encodeURIComponent('Thought you might like this...') + '%0D%0A%0D%0A' +
-        encodeURIComponent(shareDetailsObject.title + ' ') + '%0D%0A' +
+        encodeURIComponent('Thought you might like this...') + '%0D%0A%0D%0A';
+
+    if($shareBtn.hasAttribute('data-message')) {
+        message = $shareBtn.getAttribute('data-message');
+    }
+
+    message += encodeURIComponent(shareDetailsObject.title + ' ') + '%0D%0A' +
         encodeURIComponent(shareDetailsObject.url+ ' ') + '%0D%0A';
 
     encodedMessage += '&Body=' + message;
