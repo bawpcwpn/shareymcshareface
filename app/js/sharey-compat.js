@@ -47,6 +47,9 @@ var getMetaTagValue = function getMetaTagValue(tagName) {
     return false;
 };
 
+/**
+ * Set share parameters
+ */
 var setShareParameters = function setShareParameters() {
 
     for (var shareDetail in shareDetailsObject) {
@@ -70,24 +73,8 @@ var setShareParameters = function setShareParameters() {
     }
 };
 
-/**
- * Fires attached function only once
- * @param {function} fn - the function you supply
- * @param {object} context\
- * @return {function} result
- */
-
-var once = function once(fn, context) {
-    var result;
-
-    return function () {
-        if (fn) {
-            result = fn.apply(context || this, arguments);
-            fn = null;
-        }
-
-        return result;
-    };
+var getShareElement = function getShareElement(elementName) {
+    return document.querySelector(shareyElementType + '.' + shareyBaseClass + elementName);
 };
 
 /**
@@ -101,11 +88,10 @@ var bindShareUrl = function bindShareUrl(elementName, shareUrl) {
     var windowTarget = arguments.length <= 2 || arguments[2] === undefined ? "_blank" : arguments[2];
 
 
-    var $shareButton = document.querySelector(shareyElementType + '.' + shareyBaseClass + elementName);
+    var $shareButton = getShareElement(elementName);
 
     $shareButton.addEventListener('click', function (event) {
         window.open(shareUrl, windowTarget);
-        console.log(windowTarget);
     });
 };
 
@@ -128,7 +114,7 @@ var initFacebookShare = function initFacebookShare(elementName) {
 
 var initTwitterShare = function initTwitterShare(elementName) {
 
-    var $shareButton = document.querySelector(shareyElementType + '.' + shareyBaseClass + elementName),
+    var $shareButton = getShareElement(elementName),
         twitterShareUrl = 'https://twitter.com/intent/tweet?text=',
         twitterUrlLength = 23,
         twitterPostLength = 140,
@@ -189,16 +175,28 @@ var initEmailShare = function initEmailShare(elementName) {
 
     var subject = void 0,
         message = void 0,
-        encodedMessage = void 0;
+        encodedMessage = void 0,
+        $shareBtn = getShareElement(elementName);
 
     encodedMessage = 'mailto:';
 
     // Add Subject
     subject = shareDetailsObject.title;
+
+    if ($shareBtn.hasAttribute('data-subject')) {
+        subject = $shareBtn.getAttribute('data-subject');
+    }
+
     encodedMessage += '?Subject=' + encodeURIComponent(subject);
 
     // Add Message
-    message = encodeURIComponent('Hey! ') + '%0D%0A' + '%0D%0A' + encodeURIComponent('Thought you might like this...') + '%0D%0A%0D%0A' + encodeURIComponent(shareDetailsObject.title + ' ') + '%0D%0A' + encodeURIComponent(shareDetailsObject.url + ' ') + '%0D%0A';
+    message = encodeURIComponent('Hey! ') + '%0D%0A' + '%0D%0A' + encodeURIComponent('Thought you might like this...') + '%0D%0A%0D%0A';
+
+    if ($shareBtn.hasAttribute('data-message')) {
+        message = $shareBtn.getAttribute('data-message');
+    }
+
+    message += encodeURIComponent(shareDetailsObject.title + ' ') + '%0D%0A' + encodeURIComponent(shareDetailsObject.url + ' ') + '%0D%0A';
 
     encodedMessage += '&Body=' + message;
 
@@ -212,7 +210,28 @@ var initEmailShare = function initEmailShare(elementName) {
  */
 
 var initLinkedInShare = function initLinkedInShare(elementName) {
-    console.log('LinkedIn share fired');
+
+    var $shareBtn = getShareElement(elementName),
+        linkedInUrl = void 0;
+
+    linkedInUrl = 'https://www.linkedin.com/shareArticle?mini=true&url=' + encodeURIComponent(shareDetailsObject.url);
+
+    // Optional title attribute
+    if ($shareBtn.hasAttribute('data-title') && $shareBtn.getAttribute('data-title') != '') {
+        linkedInUrl += '&title=' + encodeURIComponent($shareBtn.getAttribute('data-title'));
+    }
+
+    // Optional summary attribute
+    if ($shareBtn.hasAttribute('data-summary') && $shareBtn.getAttribute('data-summary') != '') {
+        linkedInUrl += '&summary=' + encodeURIComponent($shareBtn.getAttribute('data-summary'));
+    }
+
+    // Optional source attribute
+    if ($shareBtn.hasAttribute('data-source') && $shareBtn.getAttribute('data-source') != '') {
+        linkedInUrl += '&source=' + encodeURIComponent($shareBtn.getAttribute('data-source'));
+    }
+
+    bindShareUrl(elementName, linkedInUrl);
 };
 
 /**
@@ -304,11 +323,12 @@ var initShare = function initShare() {
 
                         if (shareEvent.hasOwnProperty('shareName') && shareEvent['shareName'] == shareType) {
                             if (shareEvent.hasOwnProperty('eventFired') && !shareEvent.eventFired) {
-                                initShareItem(shareType);
-                                shareEvent.eventFired = true;
 
                                 !shareParametersSet ? setShareParameters() : null;
                                 !shareParametersSet ? shareParametersSet = true : null;
+
+                                initShareItem(shareType);
+                                shareEvent.eventFired = true;
                             }
                         }
                     }

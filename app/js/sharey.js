@@ -50,7 +50,7 @@ var getMetaTagValue = tagName => {
  * Set share parameters
  */
 var setShareParameters = () => {
-
+    
     for(let shareDetail in shareDetailsObject) {
 
         // Check for description tag
@@ -89,7 +89,6 @@ var bindShareUrl = (elementName, shareUrl, windowTarget = "_blank") => {
 
     $shareButton.addEventListener('click', event => {
         window.open(shareUrl, windowTarget);
-        console.log(windowTarget);
     });
 
 };
@@ -217,7 +216,29 @@ var initEmailShare = elementName => {
  */
 
 var initLinkedInShare = elementName => {
-    console.log('LinkedIn share fired');
+
+    let $shareBtn = getShareElement(elementName),
+        linkedInUrl;
+
+    linkedInUrl = 'https://www.linkedin.com/shareArticle?mini=true&url=' + encodeURIComponent(shareDetailsObject.url);
+
+    // Optional title attribute
+    if($shareBtn.hasAttribute('data-title') && $shareBtn.getAttribute('data-title') != ''){
+        linkedInUrl += '&title=' + encodeURIComponent($shareBtn.getAttribute('data-title'));
+    }
+
+    // Optional summary attribute
+    if($shareBtn.hasAttribute('data-summary') && $shareBtn.getAttribute('data-summary') != ''){
+        linkedInUrl += '&summary=' + encodeURIComponent($shareBtn.getAttribute('data-summary'));
+    }
+
+    // Optional source attribute
+    if($shareBtn.hasAttribute('data-source') && $shareBtn.getAttribute('data-source') != ''){
+        linkedInUrl += '&source=' + encodeURIComponent($shareBtn.getAttribute('data-source'));
+    }
+
+    bindShareUrl(elementName, linkedInUrl);
+
 };
 
 /**
@@ -300,11 +321,12 @@ var initShare = () => {
             for (let shareEvent of fireEvents) {
                 if(shareEvent.hasOwnProperty('shareName') && shareEvent['shareName'] == shareType) {
                     if(shareEvent.hasOwnProperty('eventFired') && !shareEvent.eventFired) {
-                        initShareItem(shareType);
-                        shareEvent.eventFired = true;
 
                         !shareParametersSet ? setShareParameters() : null;
                         !shareParametersSet ? shareParametersSet = true : null;
+
+                        initShareItem(shareType);
+                        shareEvent.eventFired = true;
                     }
                 }
             }

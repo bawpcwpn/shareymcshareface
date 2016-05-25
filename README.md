@@ -57,7 +57,14 @@ Twitter accepts the following additional data-attribute parameters to override d
 
 ### LinkedIn
 
-LinkedIn doesn't have any additional parameters at this stage
+LinkedIn's crawler by default will also use OpenGraph tags if they exist.
+LinkedIn accepts the following additional data-attribute parameters to override data:
+
+| data-attribute  | Details |
+|-----------------|---------|
+| data-title | Set a custom title |
+| data-summary  | Set a custom summary | 
+| data-source  | Set a custom source | 
 
 ### Email
 
