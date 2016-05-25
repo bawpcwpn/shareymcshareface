@@ -94,14 +94,18 @@ var once = function once(fn, context) {
  * Opens url on click in new window
  * @param elementName - name of element to bind click event to
  * @param shareUrl - the url to open in a new window
+ * @param windowTarget - the target of the window
  */
 
 var bindShareUrl = function bindShareUrl(elementName, shareUrl) {
+    var windowTarget = arguments.length <= 2 || arguments[2] === undefined ? "_blank" : arguments[2];
+
 
     var $shareButton = document.querySelector(shareyElementType + '.' + shareyBaseClass + elementName);
 
     $shareButton.addEventListener('click', function (event) {
-        window.open(shareUrl);
+        window.open(shareUrl, windowTarget);
+        console.log(windowTarget);
     });
 };
 
@@ -160,7 +164,7 @@ var initTwitterShare = function initTwitterShare(elementName) {
 
         if (descriptionLength > twitterUrlLength) {
             // Remove 3 characters for ...
-            twitterPostLength -= 4;
+            twitterPostLength -= 3;
             // Trim description length
             description = description.substring(0, Math.min(description.length, twitterPostLength)) + '... ';
         }
@@ -172,8 +176,6 @@ var initTwitterShare = function initTwitterShare(elementName) {
     // Encode URL
     twitterShareUrl += encodeURIComponent(twitterShareMessage);
 
-    console.log(twitterShareUrl);
-
     bindShareUrl(elementName, twitterShareUrl);
 };
 
@@ -184,7 +186,23 @@ var initTwitterShare = function initTwitterShare(elementName) {
  */
 
 var initEmailShare = function initEmailShare(elementName) {
-    console.log('Email share fired');
+
+    var subject = void 0,
+        message = void 0,
+        encodedMessage = void 0;
+
+    encodedMessage = 'mailto:';
+
+    // Add Subject
+    subject = shareDetailsObject.title;
+    encodedMessage += '?Subject=' + encodeURIComponent(subject);
+
+    // Add Message
+    message = encodeURIComponent('Hey! ') + '%0D%0A' + '%0D%0A' + encodeURIComponent('Thought you might like this...') + '%0D%0A%0D%0A' + encodeURIComponent(shareDetailsObject.title + ' ') + '%0D%0A' + encodeURIComponent(shareDetailsObject.url + ' ') + '%0D%0A';
+
+    encodedMessage += '&Body=' + message;
+
+    bindShareUrl(elementName, encodedMessage, '_self');
 };
 
 /**

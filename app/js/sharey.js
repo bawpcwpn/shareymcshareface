@@ -93,14 +93,16 @@ var once = (fn, context) => {
  * Opens url on click in new window
  * @param elementName - name of element to bind click event to
  * @param shareUrl - the url to open in a new window
+ * @param windowTarget - the target of the window
  */
 
-var bindShareUrl = (elementName, shareUrl) => {
+var bindShareUrl = (elementName, shareUrl, windowTarget = "_blank") => {
 
     let $shareButton = document.querySelector(shareyElementType + '.' + shareyBaseClass + elementName);
 
     $shareButton.addEventListener('click', event => {
-        window.open(shareUrl);
+        window.open(shareUrl, windowTarget);
+        console.log(windowTarget);
     });
 
 };
@@ -175,8 +177,6 @@ var initTwitterShare = elementName => {
     // Encode URL
     twitterShareUrl += encodeURIComponent(twitterShareMessage);
 
-    console.log(twitterShareUrl);
-
     bindShareUrl(elementName, twitterShareUrl);
 
 };
@@ -188,7 +188,28 @@ var initTwitterShare = elementName => {
  */
 
 var initEmailShare = elementName => {
-    console.log('Email share fired');
+
+    let subject,
+        message,
+        encodedMessage;
+
+    encodedMessage = 'mailto:';
+
+    // Add Subject
+    subject = shareDetailsObject.title;
+    encodedMessage += '?Subject=' + encodeURIComponent(subject);
+
+    // Add Message
+    message = encodeURIComponent('Hey! ') + '%0D%0A' +
+        '%0D%0A' +
+        encodeURIComponent('Thought you might like this...') + '%0D%0A%0D%0A' +
+        encodeURIComponent(shareDetailsObject.title + ' ') + '%0D%0A' +
+        encodeURIComponent(shareDetailsObject.url+ ' ') + '%0D%0A';
+
+    encodedMessage += '&Body=' + message;
+
+    bindShareUrl(elementName, encodedMessage, '_self');
+
 };
 
 /**
