@@ -4,6 +4,8 @@
         <meta charset="UTF-8">
         <title>Sharey McShareface</title>
 
+        <meta property="og:url" content="http://www.google.com" />
+
         <link rel="stylesheet" href="fonts/fontello/css/sharey.css" />
 
         <style>
@@ -21,8 +23,6 @@
                 text-align: center;
             }
 
-
-
             ul.social-list {
                 list-style: none;
                 margin: 40px 0;
@@ -35,14 +35,14 @@
                 font-size: 35px;
                 margin: 0 4px;
             }
-            span[class^="share_"] {
+            span[class^="sharey_"] {
                 cursor: pointer;
                 transition: all 0.2s;
             }
-            span[class^="share_"]:hover {
+            span[class^="sharey_"]:hover {
                 opacity: 0.8;
             }
-            span[class^="share_"]:active {
+            span[class^="sharey_"]:active {
                 opacity: 0.6;
             }
         </style>
@@ -55,7 +55,7 @@
 
             <ul class="social-list">
                 <li><span class="sharey_facebook"><i class="sharey-facebook-rect"></i></span></li>
-                <li><span class="sharey_twitter"><i class="sharey-twitter-bird"></i></span></li>
+                <li><span class="sharey_twitter" data-username="sharey" data-description="Some really awesome site"><i class="sharey-twitter-bird"></i></span></li>
                 <li><span class="sharey_email"><i class="sharey-mail"></i></span></li>
                 <li><span class="sharey_linkedin"><i class="sharey-linkedin"></i></span></li>
             </ul>

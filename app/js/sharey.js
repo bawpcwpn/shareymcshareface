@@ -50,7 +50,7 @@ var getMetaTagValue = tagName => {
  * Set share parameters
  */
 var setShareParameters = () => {
-    
+
     for(let shareDetail in shareDetailsObject) {
 
         // Check for description tag
