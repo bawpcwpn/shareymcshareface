@@ -16,7 +16,7 @@ You may be required to uninstall previous versions of gulp using `npm uninstall 
 
 First include the script on your site:
 
-`//vivogroup.com.au/sharey/sharey.min.js`
+`//shareymcshareface.com/sharey.min.js`
 
 And then simply include any of following:
 

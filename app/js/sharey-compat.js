@@ -14,8 +14,7 @@
 var shareyElementType = 'span',
     shareyClassPrefix = 'sharey',
     shareyClassSeperator = '_',
-    shareyBaseClass = shareyClassPrefix + shareyClassSeperator,
-    facebookAppId = '165738063828836';
+    shareyBaseClass = shareyClassPrefix + shareyClassSeperator;
 
 /**
  * Share details to use across services
@@ -73,6 +72,11 @@ var setShareParameters = function setShareParameters() {
     }
 };
 
+/**
+ * Returns the element
+ * @param elementName - element name eg. facebook, twitter etc
+ * @returns {Element}
+ */
 var getShareElement = function getShareElement(elementName) {
     return document.querySelector(shareyElementType + '.' + shareyBaseClass + elementName);
 };
