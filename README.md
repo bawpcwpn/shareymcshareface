@@ -9,7 +9,7 @@ Sharey McShareface is a lightweight alternative to AddThis or ShareThis. It does
 [Download latest version](https://raw.githubusercontent.com/bawpcwpn/shareymcshareface/master/dist/js/sharey.min.js)
 
 Install with npm
-`npm install -save shareymcshareface`
+`npm install --save shareymcshareface`
 
 ## Getting started
 
