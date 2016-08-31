@@ -11,6 +11,8 @@ To install use
 `npm install -g git+https://git@github.com/gulpjs/gulp.git#4.0`  
 You may be required to uninstall previous versions of gulp using `npm uninstall -g gulp` first
 
+To use Gulp v4.0 locally inside the repository use `$(npm bin)/gulp` to run the commands
+
 
 ## Getting started
 
