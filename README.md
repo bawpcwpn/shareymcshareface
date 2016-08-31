@@ -1,18 +1,15 @@
 # Sharey McShareface
 
-## Overview
+## What is Sharey McShareface?
 
 Sharey McShareface is a lightweight alternative to AddThis or ShareThis. It doesn't initiate any service specific scripts until you hover over that service.
 
-## Setup
+## Download
 
-This uses **Gulp v4.0**.  
-To install use  
-`npm install -g git+https://git@github.com/gulpjs/gulp.git#4.0`  
-You may be required to uninstall previous versions of gulp using `npm uninstall -g gulp` first
+[Download latest version](https://raw.githubusercontent.com/bawpcwpn/shareymcshareface/master/dist/js/sharey.min.js)
 
-To use Gulp v4.0 locally inside the repository use `$(npm bin)/gulp` to run the commands
-
+Install with npm
+`npm install -save shareymcshareface`
 
 ## Getting started
 
@@ -76,3 +73,12 @@ Email accepts the following additional data-attribute parameters to override dat
 |-----------------|---------|
 | data-subject | Set a custom subject on the email |
 | data-message  | Allows you set to email content sans the Page title and page url to be included. Lines breaks are not accepted currently. | 
+
+## Development Setup
+
+This uses **Gulp v4.0**.
+To install use
+`npm install -g git+https://git@github.com/gulpjs/gulp.git#4.0`
+You may be required to uninstall previous versions of gulp using `npm uninstall -g gulp` first
+
+To use Gulp v4.0 locally inside the repository use `$(npm bin)/gulp` to run the commands
