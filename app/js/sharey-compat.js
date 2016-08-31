@@ -138,11 +138,11 @@ var initTwitterShare = function initTwitterShare(elementName) {
     var description = null;
 
     // Check if description object value already set
-    if (shareDetailsObject.description != null && shareDetailsObject.description != '') {
+    if (shareDetailsObject.description !== null && shareDetailsObject.description !== '') {
         description = shareDetailsObject;
     }
     // Check for button override
-    if ($shareButton.hasAttribute('data-description') && $shareButton.getAttribute('data-description') != '') {
+    if ($shareButton.hasAttribute('data-description') && $shareButton.getAttribute('data-description') !== '') {
         description = $shareButton.getAttribute('data-description');
     }
     // check if description is still null
@@ -298,7 +298,7 @@ var initShare = function initShare() {
                 shareType = void 0;
 
             // Loop over classes in classList
-            for (i = 0; i < classList.length; i++) {
+            for (var i = 0; i < classList.length; i++) {
                 // set className as a string of the current class
                 var className = classList.item(i).toString();
 
@@ -354,8 +354,6 @@ var initShare = function initShare() {
         };
 
         for (var _iterator = $shareItems[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var i;
-
             _loop();
         }
     } catch (err) {

@@ -9,7 +9,7 @@
     Default options
  */
 
-var shareyElementType = 'span',
+const shareyElementType = 'span',
     shareyClassPrefix = 'sharey',
     shareyClassSeperator = '_',
     shareyBaseClass = shareyClassPrefix + shareyClassSeperator;
@@ -19,7 +19,7 @@ var shareyElementType = 'span',
  * Share details to use across services
  * @type {{title: string, type: null, image: null, url: string, description: null, video: null}}
  */
-var shareDetailsObject = {
+const shareDetailsObject = {
     "title"       : document.title,
     "type"        : null,
     "image"       : null,
@@ -33,10 +33,10 @@ var shareDetailsObject = {
  * @param tagName
  * @returns {*}
  */
-var getMetaTagValue = tagName => {
-    var metas = document.getElementsByTagName('meta');
+const getMetaTagValue = tagName => {
+    const metas = document.getElementsByTagName('meta');
 
-    for (var i=0; i<metas.length; i++) {
+    for (let i = 0; i < metas.length; i++) {
         if (metas[i].getAttribute("property") == tagName) {
             return metas[i].getAttribute("content");
         }
@@ -48,7 +48,7 @@ var getMetaTagValue = tagName => {
 /**
  * Set share parameters
  */
-var setShareParameters = () => {
+const setShareParameters = () => {
 
     for(let shareDetail in shareDetailsObject) {
 
@@ -76,7 +76,7 @@ var setShareParameters = () => {
  * @param elementName - element name eg. facebook, twitter etc
  * @returns {Element}
  */
-var getShareElement = elementName => {
+const getShareElement = elementName => {
     return document.querySelector(shareyElementType + '.' + shareyBaseClass + elementName);
 };
 
@@ -87,7 +87,7 @@ var getShareElement = elementName => {
  * @param windowTarget - the target of the window
  */
 
-var bindShareUrl = (elementName, shareUrl, windowTarget = "_blank") => {
+const bindShareUrl = (elementName, shareUrl, windowTarget = "_blank") => {
 
     let $shareButton = getShareElement(elementName);
 
@@ -104,7 +104,7 @@ var bindShareUrl = (elementName, shareUrl, windowTarget = "_blank") => {
  * @return {undefined}
  */
 
-var initFacebookShare = elementName => {
+const initFacebookShare = elementName => {
 
     bindShareUrl(elementName, 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareDetailsObject.url));
 
@@ -116,7 +116,7 @@ var initFacebookShare = elementName => {
  * @return {undefined}
  */
 
-var initTwitterShare = elementName => {
+const initTwitterShare = elementName => {
 
     let $shareButton = getShareElement(elementName),
         twitterShareUrl = 'https://twitter.com/intent/tweet?text=',
@@ -139,11 +139,11 @@ var initTwitterShare = elementName => {
     let description = null;
 
     // Check if description object value already set
-    if(shareDetailsObject.description != null && shareDetailsObject.description != '') {
+    if(shareDetailsObject.description !== null && shareDetailsObject.description !== '') {
         description = shareDetailsObject;
     }
     // Check for button override
-    if($shareButton.hasAttribute('data-description') && $shareButton.getAttribute('data-description') != '') {
+    if($shareButton.hasAttribute('data-description') && $shareButton.getAttribute('data-description') !== '') {
         description = $shareButton.getAttribute('data-description');
     }
     // check if description is still null
@@ -177,7 +177,7 @@ var initTwitterShare = elementName => {
  * @return {undefined}
  */
 
-var initEmailShare = elementName => {
+const initEmailShare = elementName => {
 
     let subject,
         message,
@@ -219,7 +219,7 @@ var initEmailShare = elementName => {
  * @return {undefined}
  */
 
-var initLinkedInShare = elementName => {
+const initLinkedInShare = elementName => {
 
     let $shareBtn = getShareElement(elementName),
         linkedInUrl;
@@ -250,7 +250,7 @@ var initLinkedInShare = elementName => {
  *  @param {string} shareType - the type of share item, eg. facebook, twitter, linkedin etc
  *  @return {undefined}
  */
-var initShareItem = shareType => {
+const initShareItem = shareType => {
 
     // Check which shareType it matches and initialise each
     // share item individually, only once it's been hovered
@@ -280,15 +280,15 @@ var initShareItem = shareType => {
  *  Initialises share on 'sharey_' items
  *  @return {undefined}
  */
-var initShare = () => {
+const initShare = () => {
 
     // get nodeList ($shareNode) of span's starting with 'sharey_' class and turn
     // it into a an array ($shareItems)
-    var $shareNode = document.querySelectorAll(shareyElementType+'[class^="'+shareyBaseClass+'"]'),
+    const $shareNode = document.querySelectorAll(shareyElementType+'[class^="'+shareyBaseClass+'"]'),
         $shareItems = Array.from($shareNode);
 
 
-    var fireEvents = [],
+    let fireEvents = [],
         shareParametersSet = false;
 
 
@@ -302,7 +302,7 @@ var initShare = () => {
             shareType;
 
         // Loop over classes in classList
-        for (var i = 0; i < classList.length; i++) {
+        for (let i = 0; i < classList.length; i++) {
             // set className as a string of the current class
             let className = classList.item(i).toString();
 
