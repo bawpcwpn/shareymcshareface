@@ -73,28 +73,17 @@ var setShareParameters = function setShareParameters() {
 };
 
 /**
- * Returns the element
- * @param elementName - element name eg. facebook, twitter etc
- * @returns {Element}
- */
-var getShareElement = function getShareElement(elementName) {
-    return document.querySelector(shareyElementType + '.' + shareyBaseClass + elementName);
-};
-
-/**
  * Opens url on click in new window
  * @param elementName - name of element to bind click event to
  * @param shareUrl - the url to open in a new window
  * @param windowTarget - the target of the window
  */
 
-var bindShareUrl = function bindShareUrl(elementName, shareUrl) {
+var bindShareUrl = function bindShareUrl(element, shareUrl) {
     var windowTarget = arguments.length <= 2 || arguments[2] === undefined ? "_blank" : arguments[2];
 
 
-    var $shareButton = getShareElement(elementName);
-
-    $shareButton.addEventListener('click', function (event) {
+    element.addEventListener('click', function (event) {
         window.open(shareUrl, windowTarget);
     });
 };
@@ -105,9 +94,9 @@ var bindShareUrl = function bindShareUrl(elementName, shareUrl) {
  * @return {undefined}
  */
 
-var initFacebookShare = function initFacebookShare(elementName) {
+var initFacebookShare = function initFacebookShare(element) {
 
-    bindShareUrl(elementName, 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareDetailsObject.url));
+    bindShareUrl(element, 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareDetailsObject.url));
 };
 
 /**
@@ -116,9 +105,9 @@ var initFacebookShare = function initFacebookShare(elementName) {
  * @return {undefined}
  */
 
-var initTwitterShare = function initTwitterShare(elementName) {
+var initTwitterShare = function initTwitterShare(element) {
 
-    var $shareButton = getShareElement(elementName),
+    var $shareButton = element,
         twitterShareUrl = 'https://twitter.com/intent/tweet?text=',
         twitterUrlLength = 23,
         twitterPostLength = 140,
@@ -166,7 +155,7 @@ var initTwitterShare = function initTwitterShare(elementName) {
     // Encode URL
     twitterShareUrl += encodeURIComponent(twitterShareMessage);
 
-    bindShareUrl(elementName, twitterShareUrl);
+    bindShareUrl(element, twitterShareUrl);
 };
 
 /**
@@ -175,12 +164,12 @@ var initTwitterShare = function initTwitterShare(elementName) {
  * @return {undefined}
  */
 
-var initEmailShare = function initEmailShare(elementName) {
+var initEmailShare = function initEmailShare(element) {
 
     var subject = void 0,
         message = void 0,
         encodedMessage = void 0,
-        $shareBtn = getShareElement(elementName);
+        $shareBtn = element;
 
     encodedMessage = 'mailto:';
 
@@ -204,7 +193,7 @@ var initEmailShare = function initEmailShare(elementName) {
 
     encodedMessage += '&Body=' + message;
 
-    bindShareUrl(elementName, encodedMessage, '_self');
+    bindShareUrl(element, encodedMessage, '_self');
 };
 
 /**
@@ -213,9 +202,9 @@ var initEmailShare = function initEmailShare(elementName) {
  * @return {undefined}
  */
 
-var initLinkedInShare = function initLinkedInShare(elementName) {
+var initLinkedInShare = function initLinkedInShare(element) {
 
-    var $shareBtn = getShareElement(elementName),
+    var $shareBtn = element,
         linkedInUrl = void 0;
 
     linkedInUrl = 'https://www.linkedin.com/shareArticle?mini=true&url=' + encodeURIComponent(shareDetailsObject.url);
@@ -235,7 +224,7 @@ var initLinkedInShare = function initLinkedInShare(elementName) {
         linkedInUrl += '&source=' + encodeURIComponent($shareBtn.getAttribute('data-source'));
     }
 
-    bindShareUrl(elementName, linkedInUrl);
+    bindShareUrl(element, linkedInUrl);
 };
 
 /**
@@ -243,27 +232,26 @@ var initLinkedInShare = function initLinkedInShare(elementName) {
  *  @param {string} shareType - the type of share item, eg. facebook, twitter, linkedin etc
  *  @return {undefined}
  */
-var initShareItem = function initShareItem(shareType) {
-
+var initShareItem = function initShareItem(shareType, element) {
     // Check which shareType it matches and initialise each
     // share item individually, only once it's been hovered
     // Pass sharey suffix class
     switch (shareType) {
         // Facebook share type
         case 'facebook':
-            initFacebookShare('facebook');
+            initFacebookShare(element);
             break;
         // Twitter share type
         case 'twitter':
-            initTwitterShare('twitter');
+            initTwitterShare(element);
             break;
         // LinkedIn share type
         case 'linkedin':
-            initLinkedInShare('linkedin');
+            initLinkedInShare(element);
             break;
         // Email share type
         case 'email':
-            initEmailShare('email');
+            initEmailShare(element);
             break;
     }
 };
@@ -310,7 +298,7 @@ var initShare = function initShare() {
                 }
             }
 
-            fireEvents.push({ shareName: shareType, eventFired: false });
+            fireEvents.push({ shareName: shareType, eventFired: false, element: $shareItem });
 
             // Add an event listener on hover of share items
             $shareItem.addEventListener('mouseover', function (event) {
@@ -331,7 +319,7 @@ var initShare = function initShare() {
                                 !shareParametersSet ? setShareParameters() : null;
                                 !shareParametersSet ? shareParametersSet = true : null;
 
-                                initShareItem(shareType);
+                                initShareItem(shareType, shareEvent.element);
                                 shareEvent.eventFired = true;
                             }
                         }

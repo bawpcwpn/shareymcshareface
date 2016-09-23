@@ -72,26 +72,15 @@ const setShareParameters = () => {
 };
 
 /**
- * Returns the element
- * @param elementName - element name eg. facebook, twitter etc
- * @returns {Element}
- */
-const getShareElement = elementName => {
-    return document.querySelector(shareyElementType + '.' + shareyBaseClass + elementName);
-};
-
-/**
  * Opens url on click in new window
  * @param elementName - name of element to bind click event to
  * @param shareUrl - the url to open in a new window
  * @param windowTarget - the target of the window
  */
 
-const bindShareUrl = (elementName, shareUrl, windowTarget = "_blank") => {
+const bindShareUrl = (element, shareUrl, windowTarget = "_blank") => {
 
-    let $shareButton = getShareElement(elementName);
-
-    $shareButton.addEventListener('click', event => {
+    element.addEventListener('click', event => {
         window.open(shareUrl, windowTarget);
     });
 
@@ -104,9 +93,9 @@ const bindShareUrl = (elementName, shareUrl, windowTarget = "_blank") => {
  * @return {undefined}
  */
 
-const initFacebookShare = elementName => {
+const initFacebookShare = element => {
 
-    bindShareUrl(elementName, 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareDetailsObject.url));
+    bindShareUrl(element, 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareDetailsObject.url));
 
 };
 
@@ -116,9 +105,9 @@ const initFacebookShare = elementName => {
  * @return {undefined}
  */
 
-const initTwitterShare = elementName => {
+const initTwitterShare = element => {
 
-    let $shareButton = getShareElement(elementName),
+    let $shareButton = element,
         twitterShareUrl = 'https://twitter.com/intent/tweet?text=',
         twitterUrlLength = 23,
         twitterPostLength = 140,
@@ -167,7 +156,7 @@ const initTwitterShare = elementName => {
     // Encode URL
     twitterShareUrl += encodeURIComponent(twitterShareMessage);
 
-    bindShareUrl(elementName, twitterShareUrl);
+    bindShareUrl(element, twitterShareUrl);
 
 };
 
@@ -177,12 +166,12 @@ const initTwitterShare = elementName => {
  * @return {undefined}
  */
 
-const initEmailShare = elementName => {
+const initEmailShare = element => {
 
     let subject,
         message,
         encodedMessage,
-        $shareBtn = getShareElement(elementName);
+        $shareBtn = element;
 
     encodedMessage = 'mailto:';
 
@@ -209,7 +198,7 @@ const initEmailShare = elementName => {
 
     encodedMessage += '&Body=' + message;
 
-    bindShareUrl(elementName, encodedMessage, '_self');
+    bindShareUrl(element, encodedMessage, '_self');
 
 };
 
@@ -219,9 +208,9 @@ const initEmailShare = elementName => {
  * @return {undefined}
  */
 
-const initLinkedInShare = elementName => {
+const initLinkedInShare = element => {
 
-    let $shareBtn = getShareElement(elementName),
+    let $shareBtn = element,
         linkedInUrl;
 
     linkedInUrl = 'https://www.linkedin.com/shareArticle?mini=true&url=' + encodeURIComponent(shareDetailsObject.url);
@@ -241,7 +230,7 @@ const initLinkedInShare = elementName => {
         linkedInUrl += '&source=' + encodeURIComponent($shareBtn.getAttribute('data-source'));
     }
 
-    bindShareUrl(elementName, linkedInUrl);
+    bindShareUrl(element, linkedInUrl);
 
 };
 
@@ -250,27 +239,26 @@ const initLinkedInShare = elementName => {
  *  @param {string} shareType - the type of share item, eg. facebook, twitter, linkedin etc
  *  @return {undefined}
  */
-const initShareItem = shareType => {
-
+const initShareItem = (shareType, element) => {
     // Check which shareType it matches and initialise each
     // share item individually, only once it's been hovered
     // Pass sharey suffix class
     switch(shareType) {
         // Facebook share type
         case 'facebook':
-            initFacebookShare('facebook');
+            initFacebookShare(element);
             break;
         // Twitter share type
         case 'twitter':
-            initTwitterShare('twitter');
+            initTwitterShare(element);
             break;
         // LinkedIn share type
         case 'linkedin':
-            initLinkedInShare('linkedin');
+            initLinkedInShare(element);
             break;
         // Email share type
         case 'email':
-            initEmailShare('email');
+            initEmailShare(element);
             break;
     }
 
@@ -295,7 +283,6 @@ const initShare = () => {
     // Iterate over $shareItems
     for (let $shareItem of $shareItems) {
 
-
         // Grab the classList
         // set shareType
         let classList = $shareItem.classList,
@@ -315,7 +302,7 @@ const initShare = () => {
         }
 
 
-        fireEvents.push({shareName: shareType, eventFired: false});
+        fireEvents.push({shareName: shareType, eventFired: false, element: $shareItem});
 
         // Add an event listener on hover of share items
         $shareItem.addEventListener('mouseover',function(event){
@@ -329,7 +316,7 @@ const initShare = () => {
                         !shareParametersSet ? setShareParameters() : null;
                         !shareParametersSet ? shareParametersSet = true : null;
 
-                        initShareItem(shareType);
+                        initShareItem(shareType, shareEvent.element);
                         shareEvent.eventFired = true;
                     }
                 }
